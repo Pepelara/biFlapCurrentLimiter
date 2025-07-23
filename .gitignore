@@ -6,3 +6,10 @@
 *.rel
 *.rst
 *.sym
+*fp-info-cache
+*fp-lib-table
+*sym-lib-table
+*¬
+*.zip
+*.lk
+*.asm
