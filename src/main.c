@@ -11,8 +11,8 @@
 #define RES0 0
 #define RES1 1
 
-#define ILIMIT1 3
-#define ILIMIT2 4
+#define ILIMIT 3
+//#define ILIMIT2 4
 
 #define MOTOUT P1_2
 #define LED P3_6
@@ -24,8 +24,10 @@ void main(void)
     /*----------------------		ADC		--------------------------*/
 	ADC_CONTR |= (1<<7);	//enable
     CLK_DIV |= (1<<5);		//right justify ADC
-    P1ASF |= (1<<RES0)|(1<<RES1)|(1<<ILIMIT1)|(1<<ILIMIT2);
-    P1M1 |=  (1<<RES0)|(1<<RES1)|(1<<ILIMIT1)|(1<<ILIMIT2);
+    P1ASF |= (1<<RES0)|(1<<RES1)|(1<<ILIMIT);
+    //P1M1 |=  (1<<RES0)|(1<<RES1)|(1<<ILIMIT1);
+	P1 |= (1<<RES0)|(1<<RES1);
+    
     
     /*----------------------------------------------------------------*/
     /*---------------------		PINS	------------------------------*/
@@ -66,11 +68,11 @@ void main(void)
 		
 		res0 = adc_read(RES0);
 		res1 = adc_read(RES1);
+		current_lim = adc_read(ILIMIT) >> 1;
 		
-		if(res0 == 0 || res1 == 0)
-			current_lim = adc_read(ILIMIT1) >> 1;
-		else
-			current_lim = adc_read(ILIMIT2) >> 1;
+		if(res0 == 0) res1 += 32;
+		if(res1 == 0) res0 += 32;
+				
 
 		if(res0 > res1){
 			current = res0 - res1;
